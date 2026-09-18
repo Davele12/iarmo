@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { cases } from '@/content/es/business';
 import { Breadcrumb, FinalCta, PageIntro } from '@/components/ui';
 import { BreadcrumbSchema, pageMetadata } from '@/lib/seo';
+export const dynamicParams = false;
 export function generateStaticParams() { return cases.map(client => ({ slug: client.slug })); }
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
