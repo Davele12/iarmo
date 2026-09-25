@@ -36,7 +36,7 @@
     "lighthouse": "13.4.1",
     "postcss": "8.5.28",
     "tailwindcss": "4.3.3",
-    "tsx": "4.23.13",
+    "tsx": "4.23.15",
     "typescript": "6.0.3"
   }
 }
