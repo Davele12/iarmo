@@ -1,20 +1,12 @@
 import type { ClientCase, Plan, Service } from '@/types/content';
 
 export const home = {
-  eyebrow: 'Tu aliado tecnológico',
   title: 'Tu empresa puede',
   emphasis: 'operar mejor.',
   description: 'Automatizamos procesos, conectamos información y construimos soluciones de datos, software e inteligencia artificial para pequeñas y medianas empresas.',
   cta: 'Agenda un diagnóstico',
   promise: 'Cuéntanos el reto. Acordamos contigo el siguiente paso.',
 };
-
-export const problems = [
-  { title: 'La misma información, una y otra vez.', text: 'Un pedido pasa del correo a Excel y de Excel al sistema. Cada copia abre la puerta a un error.', tag: 'MENOS REPROCESOS' },
-  { title: 'Reportes que llegan tarde.', text: 'Cuando la información está lista, la decisión ya no puede esperar. Necesitas ver lo que importa a tiempo.', tag: 'MÁS CLARIDAD' },
-  { title: 'Herramientas que no se hablan.', text: 'Ventas, inventario y operación tienen versiones distintas de la misma realidad.', tag: 'MÁS CONEXIÓN' },
-  { title: 'Todo depende de una persona.', text: 'El proceso vive en la memoria de alguien. Crecer también exige compartir conocimiento y control.', tag: 'MÁS CONTINUIDAD' },
-];
 
 export const services: Service[] = [
   { id: 'automatizacion', title: 'Automatización e Integración', short: 'Menos tareas repetidas. Procesos conectados.', problem: 'Tu equipo vuelve a digitar datos, copiar archivos o perseguir aprobaciones.', action: 'Conectamos sistemas y diseñamos flujos de información, formularios y automatizaciones con reglas claras.', outcome: 'Liberar tiempo operativo y reducir errores de transferencia.', tools: ['n8n', 'Make', 'APIs', 'Python'] },
@@ -24,11 +16,18 @@ export const services: Service[] = [
   { id: 'transformacion', title: 'Transformación y Tecnología Empresarial', short: 'Una ruta clara y un aliado para recorrerla.', problem: 'Tienes varias necesidades tecnológicas y no está claro por dónde empezar ni quién debe acompañarlas.', action: 'Diagnosticamos, priorizamos y acompañamos la adopción de herramientas, infraestructura y prácticas; capacitamos al equipo para usarlas.', outcome: 'Invertir con criterio y sostener mejoras que la empresa pueda adoptar.', tools: ['Odoo', 'Microsoft 365', 'Google Workspace', 'Cloud'] },
 ];
 
+export const technologyTools = [
+  'Python', 'JavaScript / TypeScript', 'React / Next.js', 'Node.js', 'FastAPI',
+  'SQL', 'PostgreSQL', 'Power BI', 'Excel / Google Sheets', 'n8n', 'Make',
+  'APIs', 'Docker', 'Git / GitHub', 'OpenAI', 'Gemini', 'Odoo',
+  'Microsoft 365', 'Google Workspace', 'ETL',
+] as const;
+
 export const method = [
-  { title: 'Entendemos', text: 'Escuchamos a quienes viven el proceso. Aclaramos el problema, el contexto y lo que necesitas lograr.' },
-  { title: 'Priorizamos', text: 'Identificamos oportunidades y definimos una ruta según impacto, esfuerzo y capacidad de tu empresa.' },
-  { title: 'Construimos', text: 'Implementamos por etapas, validamos contigo y dejamos al equipo preparado para usar la solución.' },
-  { title: 'Acompañamos', text: 'Revisamos la adopción, aprendemos de la operación y acordamos las siguientes mejoras.' },
+  { title: 'Descubrimos', text: 'Estudiamos tu operación, los objetivos del negocio y las necesidades de quienes participan en el proceso. Identificamos dependencias, riesgos y oportunidades de mejora.' },
+  { title: 'Definimos', text: 'Convertimos los hallazgos en un alcance claro: prioridades, entregables, etapas, responsables y criterios para validar el avance del proyecto.' },
+  { title: 'Implementamos', text: 'Construimos la solución por iteraciones. Entregamos avances verificables, validamos contigo cada etapa y ajustamos el trabajo con base en el uso real.' },
+  { title: 'Transferimos y evolucionamos', text: 'Preparamos al equipo, documentamos lo entregado y revisamos la adopción. A partir de la operación, acordamos las siguientes mejoras y oportunidades.' },
 ];
 
 export const plans: Plan[] = [
@@ -39,9 +38,31 @@ export const plans: Plan[] = [
 
 const pendingSections = ['Contexto', 'Problema', 'Oportunidad', 'Solución implementada', 'Tecnologías utilizadas', 'Impacto', 'Evolución'].map(title => ({ title, text: 'Contenido pendiente de validación con el cliente. Publicaremos únicamente información confirmada.' }));
 export const cases: ClientCase[] = [
-  { slug: 'productos-deli-ricura', name: 'Productos Deli Ricura', status: 'pending', sections: pendingSections },
-  { slug: 'grupo-empresarial-suga', name: 'Grupo Empresarial Suga', status: 'pending', sections: pendingSections },
+  {
+    slug: 'grupo-empresarial-suga', name: 'Grupo Empresarial Suga', status: 'pending', sector: 'Contratación pública',
+    headline: 'Inteligencia aplicada a la búsqueda de oportunidades.',
+    summary: 'Diseñamos agentes inteligentes, APIs y sistemas de alertas que facilitan la consulta y seguimiento de información relacionada con procesos de contratación pública.',
+    challenge: 'Identificar, consultar y hacer seguimiento a oportunidades relacionadas con contratación y licitaciones públicas.',
+    solutions: ['Agentes inteligentes para consultas', 'Automatización de búsquedas', 'APIs e integraciones', 'Alertas sobre oportunidades de licitación'],
+    capabilities: ['Agentes IA', 'APIs', 'Integraciones', 'Automatización', 'Procesamiento de información'],
+    impact: 'Menos búsqueda manual. Más capacidad para identificar y analizar oportunidades.',
+    technologies: ['APIs', 'Automatización', 'Agentes IA', 'Integraciones'], visualType: 'opportunity',
+    image: { src: '/clients/grupo-empresarial-suga.webp', alt: 'Identidad visual de Grupo Empresarial Suga', fit: 'contain' }, sections: pendingSections,
+  },
+  {
+    slug: 'productos-deli-ricura', name: 'Productos Deli Ricura', status: 'pending', sector: 'Manufactura y alimentos',
+    headline: 'Un partner tecnológico para toda la operación.',
+    summary: 'Acompañamos a Productos Deli Ricura en la evolución digital de diferentes procesos, combinando automatización, datos, herramientas internas e inteligencia artificial.',
+    challenge: 'Acompañar diferentes áreas de la organización para identificar problemas, oportunidades de digitalización y soluciones tecnológicas.',
+    solutions: ['Automatización de procesos', 'Digitalización de actividades internas', 'Integración y análisis de información', 'Herramientas internas e IA para atención al cliente'],
+    capabilities: ['Acompañamiento', 'Automatización', 'Datos', 'Software', 'IA'],
+    impact: 'Tecnología aplicada de forma transversal a diferentes áreas del negocio.',
+    technologies: ['Analítica', 'Automatización', 'IA', 'Software', 'Datos'], visualType: 'operations',
+    image: { src: '/clients/productos-deli-ricura.webp', alt: 'Logo de Productos Deli Ricura', fit: 'contain' }, sections: pendingSections,
+  },
 ];
+
+export const clients = cases.map(({ slug, name, image }) => ({ id: slug, name, image }));
 
 export const faqs = [
   { question: '¿Necesito saber qué tecnología necesita mi empresa?', answer: 'No. Podemos empezar por el proceso que te está generando dificultades. El diagnóstico inicial nos ayuda a entender el contexto y acordar qué conviene explorar.' },

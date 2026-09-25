@@ -10,7 +10,7 @@ test('home CTA → diagnostic form → accepted receipt (delivery boundary mocke
   });
   await page.goto('/');
   await page.locator('.hero').getByRole('link', { name: 'Agenda un diagnóstico' }).click();
-  await expect(page).toHaveURL(/diagnostico/);
+  await expect(page).toHaveURL(/#contacto$/);
   await page.getByRole('button', { name: 'Solicitar diagnóstico' }).click();
   await expect(page.getByRole('textbox', { name: /^Nombre/ })).toBeFocused();
   await page.getByRole('textbox', { name: /^Nombre/ }).fill('Persona de prueba');
@@ -24,7 +24,7 @@ test('home CTA → diagnostic form → accepted receipt (delivery boundary mocke
 });
 
 test('assessment all questions, back navigation, result and optional transfer', async ({ page }) => {
-  await page.goto('/#autodiagnostico');
+  await page.goto('/#diagnostico');
   await page.getByRole('button', { name: 'Iniciar autodiagnóstico' }).click();
   await expect(page.getByRole('button', { name: 'Siguiente' })).toBeDisabled();
   for (let index = 0; index < 8; index++) {
@@ -37,7 +37,7 @@ test('assessment all questions, back navigation, result and optional transfer', 
     await page.getByRole('button', { name: index === 7 ? 'Ver orientación' : 'Siguiente' }).click();
   }
   await expect(page.getByRole('heading', { name: 'El siguiente paso puede ser conectar lo que ya tienes.' })).toBeVisible();
-  await page.locator('.assessment-result').getByRole('link', { name: 'Solicitar diagnóstico' }).click();
+  await page.locator('.assessment-result').getByRole('link', { name: 'Agenda un diagnóstico' }).click();
   await expect(page.getByLabel('Adjuntar mis respuestas')).toBeChecked();
   await page.getByLabel('Adjuntar mis respuestas').uncheck();
   await expect(page.getByLabel('Adjuntar mis respuestas')).not.toBeChecked();
@@ -79,10 +79,10 @@ test('all routes and local links resolve; genuine 404 and security headers', asy
   expect(await casePage.text()).toContain('noindex');
 });
 
-for (const width of [360, 390, 768, 1280, 1536]) {
+for (const width of [320, 360, 390, 768, 960, 1280, 1536]) {
   test(`responsive home and form at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
-    for (const path of ['/', '/diagnostico', '/planes', '/soluciones']) {
+    for (const path of ['/', '/diagnostico', '/planes', '/soluciones', '/casos', '/casos/productos-deli-ricura', '/nosotros', '/privacy', '/terms', '/no-existe']) {
       await page.goto(path);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), path).toBe(true);
     }
@@ -91,7 +91,7 @@ for (const width of [360, 390, 768, 1280, 1536]) {
   });
 }
 
-for (const path of ['/', '/soluciones', '/planes', '/casos', '/casos/productos-deli-ricura', '/nosotros', '/diagnostico', '/privacy', '/terms', '/no-existe']) {
+for (const path of ['/', '/soluciones', '/planes', '/casos', '/casos/productos-deli-ricura', '/casos/grupo-empresarial-suga', '/nosotros', '/diagnostico', '/privacy', '/terms', '/no-existe']) {
   test(`axe WCAG 2.2 AA ${path}`, async ({ page }) => {
     await page.goto(path);
     const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
@@ -112,19 +112,83 @@ test('keyboard skip link, mobile navigation and reduced motion', async ({ page }
   await expect(page.getByRole('button', { name: 'Menú' })).toBeFocused();
   await expect(page.getByRole('navigation', { name: 'Principal' })).toBeHidden();
   expect(await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior)).toBe('auto');
+  await page.locator('.nav-cta').hover();
+  expect(await page.locator('.nav-cta').evaluate(element => getComputedStyle(element).transform)).toBe('none');
 });
+
+test('brand assets, local fonts, home metadata and confirmed client logos', async ({ page, request }) => {
+  const fontRequests: string[] = [];
+  page.on('request', request => { if (request.resourceType() === 'font') fontRequests.push(request.url()); });
+  await page.goto('/');
+  await page.evaluate(() => document.fonts.ready);
+  await expect(page).toHaveTitle('iarmo | Automatización, datos, software e IA para empresas');
+  await expect(page.locator('.home-story .eyebrow')).toHaveCount(0);
+  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', await page.title());
+  const logos = page.getByRole('img', { name: 'iarmo', exact: true });
+  await expect(logos).toHaveCount(2);
+  for (const logo of await logos.all()) {
+    await logo.scrollIntoViewIfNeeded();
+    await expect.poll(() => logo.evaluate(element => (element as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  }
+  expect(fontRequests.length).toBeGreaterThan(0);
+  expect(fontRequests.every(url => url.startsWith('http://127.0.0.1:3101/'))).toBe(true);
+  const fonts = await page.evaluate(() => ({ body: getComputedStyle(document.body).fontFamily, heading: getComputedStyle(document.querySelector('h1')!).fontFamily }));
+  expect(fonts.body).toContain('inter');
+  expect(fonts.heading).toContain('manrope');
+  expect(await page.locator('.client-logo-marquee .infinite-marquee-track').evaluate(element => getComputedStyle(element).animationName)).toBe('infinite-marquee-forward');
+  expect(await page.locator('.technology-marquee .infinite-marquee-track').evaluate(element => getComputedStyle(element).animationName)).toBe('infinite-marquee-reverse');
+  await expect(page.locator('#clientes')).toBeVisible();
+  await expect(page.locator('.case-study')).toHaveCount(0);
+  const clientImages = page.getByRole('img', { name: /Productos Deli Ricura|Grupo Empresarial Suga/ });
+  await expect(clientImages).toHaveCount(2);
+  // The logos move continuously: scroll their stable section, not an animated image.
+  await page.locator('#clientes').scrollIntoViewIfNeeded();
+  for (const image of await clientImages.all()) { await expect.poll(() => image.evaluate(element => (element as HTMLImageElement).naturalWidth)).toBeGreaterThan(0); }
+  expect((await request.get('/clients/productos-deli-ricura.webp')).headers()['content-type']).toContain('image/webp');
+  expect((await request.get('/clients/grupo-empresarial-suga.webp')).headers()['content-type']).toContain('image/webp');
+  await expect(page.locator('.client-logo-marquee .infinite-marquee-set').first().locator('.client-logo')).toHaveCount(2);
+  await expect(page.locator('.technology-marquee .infinite-marquee-set').first().locator('.technology-tool')).toHaveCount(20);
+  const schema = await page.locator('script[type="application/ld+json"]').allTextContents();
+  const organization = schema.map(text => JSON.parse(text)).flatMap(value => value['@graph'] ?? []).find(value => value['@type'] === 'Organization');
+  expect(organization.logo.url).toBe('https://iarmo.com/brand/iarmo-symbol.png');
+  expect((await request.get('/brand/iarmo-symbol.png')).status()).toBe(200);
+  expect((await request.get('/icon.png')).headers()['content-type']).toContain('image/png');
+  expect((await request.get('/opengraph-image')).headers()['content-type']).toContain('image/png');
+});
+
+for (const width of [320, 390, 768, 1280]) {
+  test(`persistent diagnostic CTA and readable mobile menu at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto('/');
+    const cta = page.locator('.site-header').getByRole('link', { name: 'Agenda un diagnóstico' });
+    await expect(cta).toBeInViewport();
+    await page.locator('.final-cta').scrollIntoViewIfNeeded();
+    await expect(cta).toBeInViewport();
+    expect((await cta.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    if (width < 1201) {
+      await page.getByRole('button', { name: 'Menú', exact: true }).click();
+      await expect(cta).toBeInViewport();
+      await page.getByRole('navigation', { name: 'Principal', exact: true }).getByRole('link', { name: 'Soluciones', exact: true }).click();
+      await expect(page).toHaveURL(/#soluciones$/);
+      await expect(page.getByRole('navigation', { name: 'Principal', exact: true })).toBeHidden();
+    }
+    await cta.click();
+    await expect(page).toHaveURL(/#contacto$/);
+    await expect(page.getByRole('form', { name: 'Solicitud de diagnóstico' })).toBeVisible();
+  });
+}
 
 test('real endpoint enforces origin, consent and honest SMTP failure', async ({ request }) => {
   const data = { name: 'Persona de prueba', company: 'Empresa de prueba', email: 'test@example.com', size: '5–15', challenge: 'Necesitamos conectar pedidos e inventario.', consent: true };
   expect((await request.post('/api/diagnostico', { data, headers: { origin: 'https://otro.example' } })).status()).toBe(403);
-  expect((await request.post('/api/diagnostico', { data: { ...data, consent: false }, headers: { origin: 'http://127.0.0.1:3000' } })).status()).toBe(422);
-  const failed = await request.post('/api/diagnostico', { data, headers: { origin: 'http://127.0.0.1:3000' } });
+  expect((await request.post('/api/diagnostico', { data: { ...data, consent: false }, headers: { origin: 'http://127.0.0.1:3101' } })).status()).toBe(422);
+  const failed = await request.post('/api/diagnostico', { data, headers: { origin: 'http://127.0.0.1:3101' } });
   expect(failed.status()).toBe(502);
   expect((await failed.json()).message).toContain('No pudimos confirmar');
 });
 
 test('assessment question and result are accessible', async ({ page }) => {
-  await page.goto('/#autodiagnostico');
+  await page.goto('/#diagnostico');
   await page.getByRole('button', { name: 'Iniciar autodiagnóstico' }).click();
   expect((await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze()).violations).toEqual([]);
   for (let index = 0; index < 8; index++) {

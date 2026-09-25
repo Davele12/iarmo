@@ -1,7 +1,7 @@
 # 02 — Arquitectura de información
 
 ## Navegación
-Marca → inicio. Soluciones, Acompañamiento, Casos, Nosotros y CTA persistente «Agenda un diagnóstico». En móvil menú desplegable accesible. Footer con descriptor, privacidad y términos. No inventar dirección, teléfono o redes.
+Marca ? inicio. Soluciones, Acompa?amiento, Clientes, Nosotros y CTA persistente ?Agenda un diagn?stico?. En m?vil men? desplegable accesible. Footer con descriptor, privacidad y t?rminos. No inventar direcci?n, tel?fono o redes.
 
 | URL | Propósito y estructura |
 | --- | --- |

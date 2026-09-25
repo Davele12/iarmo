@@ -18,6 +18,13 @@ export function LeadForm({ available }: { available: boolean }) {
   const status = useRef<HTMLDivElement>(null);
   const form = useRef<HTMLFormElement>(null);
   useEffect(() => {
+    const syncAssessment = () => setAssessment(assessmentTransfer.read());
+    const selectInterest = (event: Event) => {
+      const area: unknown = (event as CustomEvent<unknown>).detail;
+      if (typeof area === 'string' && services.some(service => service.id === area)) setInterest(area);
+    };
+    window.addEventListener('iarmo:assessment-change', syncAssessment);
+    window.addEventListener('iarmo:contact-interest', selectInterest);
     const saved = assessmentTransfer.read();
     // Storage and query parameters are external browser state, read only after hydration.
     queueMicrotask(() => {
@@ -25,6 +32,10 @@ export function LeadForm({ available }: { available: boolean }) {
       const area = new URLSearchParams(window.location.search).get('interes');
       if (services.some(service => service.id === area)) setInterest(area ?? '');
     });
+    return () => {
+      window.removeEventListener('iarmo:assessment-change', syncAssessment);
+      window.removeEventListener('iarmo:contact-interest', selectInterest);
+    };
   }, []);
   const errorProps = (name: keyof LeadErrors) => ({ 'aria-invalid': Boolean(errors[name]), 'aria-describedby': errors[name] ? `${name}-error` : undefined });
   const errorText = (name: keyof LeadErrors) => errors[name] ? <span className="field-error" id={`${name}-error`}>{errors[name]}</span> : null;

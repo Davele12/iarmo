@@ -2,11 +2,12 @@ import type { Metadata } from 'next';
 import { site } from '@/config/site';
 
 export function pageMetadata(title: string, description: string, path: string, noindex = false): Metadata {
+  const fullTitle = path === '/' ? `iarmo | ${title}` : `${title} | iarmo`;
   return {
-    title: { absolute: `${title} | iarmo` }, description,
+    title: { absolute: fullTitle }, description,
     alternates: { canonical: path },
-    openGraph: { title: `${title} | iarmo`, description, url: path, siteName: site.name, locale: site.locale, type: 'website', images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'iarmo — Tu empresa puede operar mejor.' }] },
-    twitter: { card: 'summary_large_image', title: `${title} | iarmo`, description, images: ['/opengraph-image'] },
+    openGraph: { title: fullTitle, description, url: path, siteName: site.name, locale: site.locale, type: 'website', images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: `iarmo — ${site.tagline}.` }] },
+    twitter: { card: 'summary_large_image', title: fullTitle, description, images: ['/opengraph-image'] },
     robots: { index: !noindex && process.env.SITE_INDEXABLE === 'true', follow: true },
   };
 }

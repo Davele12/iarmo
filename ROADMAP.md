@@ -5,11 +5,11 @@
 3. [x] Estrategia de contenido — docs/03-content-strategy.md.
 4. [x] Definición de identidad y tokens — DESIGN_SYSTEM.md; implementar en fase 6.
 5. [x] Arquitectura técnica — ARCHITECTURE.md y docs/adr/.
-6. [ ] Scaffold y build inicial.
-7. [ ] Componentes reutilizables.
-8. [ ] Home narrativa.
-9. [ ] Páginas secundarias y estados.
-10. [ ] Autodiagnóstico y pruebas.
+6. [x] Scaffold y build inicial.
+7. [x] Componentes reutilizables.
+8. [x] Home narrativa.
+9. [x] Páginas secundarias y estados.
+10. [x] Autodiagnóstico y suite escrita; ejecución en fase 13.
 11. [ ] Auditoría SEO, rendimiento y accesibilidad.
 12. [ ] Auditoría de seguridad.
 13. [ ] Suite completa y correcciones.
