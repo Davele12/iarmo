@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.5 - 2026-10-08
+
+- Se incorpora capacitación en tecnología e IA como servicio a medida después de Proyectos personalizados, tanto en el inicio como en `/planes`, con contenido compartido y CTA al contacto existente.
+- Fotografía original proporcionada por el propietario, presentada con encuadre vertical 4:5 centrado en las personas y bordes desvanecidos mediante CSS.
+- La fotografía se aclara y se acerca un 3 % durante 800 ms al entrar en pantalla; permanece clara y estática sin JavaScript o con movimiento reducido.
+- Metadata de `/planes` actualizada y cobertura E2E de carga de imagen, responsive, navegación, animación y alternativas accesibles. Sin cambios en API, formulario ni dependencias.
+
 ## 0.4.4 - 2026-09-25
 
 - Se simplificó el roadmap después de la revisión visual: se retiraron la perspectiva, la ruta curva y los SVG duplicados.

@@ -1,4 +1,12 @@
 /* Progressive enhancement: the server HTML never starts hidden. */
+@media (prefers-reduced-motion: no-preference) {
+  .training-photo[data-photo-state="pending"] .training-photo-motion { opacity: .75; filter: blur(2px); }
+  .training-photo[data-photo-state="entered"] .training-photo-motion { animation: training-photo-enter 800ms var(--ease-ui) both; }
+}
+@keyframes training-photo-enter {
+  from { opacity: .75; filter: blur(2px); transform: scale(1); }
+  to { opacity: 1; filter: blur(0); transform: scale(1.03); }
+}
 .anchor-alias { display: block; height: 0; }
 .home-story > section { position: relative; }
 .home-story > section:not(.hero)::before {

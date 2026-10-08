@@ -36,6 +36,13 @@ export const plans: Plan[] = [
   { id: 'partner', name: 'Tech Partner', audience: 'Para tener un brazo tecnológico.', description: 'Necesitas un aliado que participe de forma cercana en las decisiones y la ejecución tecnológica de tu empresa.', scope: ['Acompañamiento estratégico y operativo', 'Coordinación de una hoja de ruta', 'Visión integral de sistemas y procesos'] },
 ];
 
+export const training = {
+  id: 'capacitacion',
+  title: 'Capacitación en tecnología e IA para tu empresa.',
+  description: 'Ayudamos a tu equipo a incorporar la tecnología y la inteligencia artificial en su trabajo. Definimos juntos los temas y el alcance según las necesidades de tu empresa.',
+  image: '/training/capacitacion-empresa.jpg',
+} as const;
+
 const pendingSections = ['Contexto', 'Problema', 'Oportunidad', 'Solución implementada', 'Tecnologías utilizadas', 'Impacto', 'Evolución'].map(title => ({ title, text: 'Contenido pendiente de validación con el cliente. Publicaremos únicamente información confirmada.' }));
 export const cases: ClientCase[] = [
   {

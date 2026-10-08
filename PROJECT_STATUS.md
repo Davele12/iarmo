@@ -4,6 +4,7 @@ Objetivo: construir y verificar el sitio corporativo B2B completo, preparado par
 Fecha de inicio: 2026-09-17. Fuente: brief del propietario adjunto a la conversaciÃ³n.
 
 ## Fase actual
+Capacitación en tecnología e IA implementada en Planes del inicio y `/planes` (2026-10-08). Fotografía original integrada con recorte vertical y animación accesible; ver la verificación de esta entrega al final del documento.
 Fondo de Inicio y Soluciones renovado con aros y halo cyan vinculados al scroll (2026-09-24). Capturas comparativas en `docs/audits/hero-background`.
 RediseÃ±o visual y UX v2 implementado (2026-09-24). NavegaciÃ³n, metodologÃ­a y autodiagnÃ³stico refinados; verificaciÃ³n local funcional, responsive y de accesibilidad completada. El objetivo mÃ³vil de LCP â‰¤2,5 s sigue pendiente. CI remoto y lanzamiento requieren configuraciÃ³n del propietario.
 
@@ -84,3 +85,14 @@ La identidad juridica confirmada para IARMO es DIARMO S.A.S., con los mismos dat
 La ruta /terms ahora contiene terminos de uso para IARMO: alcance informativo, solicitudes, autodiagnostico, propiedad intelectual, uso permitido, terceros, disponibilidad, responsabilidad, privacidad, cambios y jurisdiccion. Identifica a DIARMO S.A.S. como titular.
 
 La marca usa el eslogan Soluciones inteligentes en el footer, metadata de marca, Organization JSON-LD y Open Graph.
+
+## Capacitación en Planes — 2026-10-08
+
+- Bloque compartido después de Proyectos personalizados, presentado como servicio a medida y conectado al contacto existente. Copy centralizado; metadata de `/planes` actualizada.
+- Foto del propietario conservada sin modificaciones en `public/training/capacitacion-empresa.jpg` (SHA-256 verificado contra el original). Encuadre CSS 4:5 sobre el grupo central, máscara de los cuatro bordes y carga diferida con tamaño reservado.
+- IntersectionObserver activa una sola entrada al 20 % de visibilidad: desenfoque suave/opacidad 75 % a imagen clara y escala 1.03 en 800 ms. Sin JavaScript o con movimiento reducido se muestra estática y clara.
+- Tipos, lint, 10 pruebas unitarias, build y 20 E2E pertinentes completados. El servidor auxiliar de E2E requirió cierre manual tras terminar las pruebas en Windows; el runner terminó con código 0 y 20 aprobadas.
+- Chrome instalado: imagen cargada y sin desbordamiento en ambas ubicaciones a 320, 390, 768 y 1440 px; cero infracciones axe WCAG 2.2 AA en inicio y `/planes`. Capturas y resultados locales en `docs/audits/training` (ignorados por Git).
+- Auditoría npm ejecutada: 7 paquetes señalados (6 de severidad alta y 1 crítica), en dependencias ya existentes; requieren revisión antes de publicar. No se modificaron `package.json` ni el lockfile. La alerta crítica corresponde a Next.js 16.3.5; las demás afectan sharp, source-map-js y la cadena de braces/micromatch/fast-glob del plugin ESLint de Next.
+- Lighthouse sobre build productivo local, una muestra por ruta/dispositivo: inicio móvil/escritorio 81/100 en rendimiento, LCP 3.04/0.65 s; `/planes` móvil/escritorio 96/100, LCP 2.84/0.59 s. CLS 0 en las cuatro mediciones. El objetivo de LCP móvil <=2.5 s sigue pendiente; estas mediciones no establecen una comparación antes/después.
+- Accesibilidad Lighthouse: inicio 100 y `/planes` 98. El descuento corresponde al salto preexistente de h1 a h3 en las tarjetas de planes; el bloque nuevo usa h3 dentro de Planes en inicio y h2 en la página independiente. SEO 69 por noindex deliberado del preview. Informes locales: `docs/audits/training/performance`.
